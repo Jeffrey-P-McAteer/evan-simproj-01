@@ -1,5 +1,6 @@
 container_root
 container_root/*
+*.lck
 
 out
 out/*
