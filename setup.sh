@@ -16,7 +16,12 @@ for dependency in "${dependencies[@]}" ; do
 done
 
 container_hostname='evan-simproj-01'
-root_dir="$PWD/container_root"
+
+if [[ -z "$root_dir" ]] ; then
+  root_dir="$PWD/container_root"
+fi
+
+echo "Using Root Directory $root_dir for container."
 
 if ! [[ -e "$root_dir" ]] || ! [[ -e "$root_dir/root" ]]; then
   echo "Creating an Arch Linux container at $root_dir"
@@ -77,17 +82,30 @@ if ! [ -e "$pacman_setup_complete_flag" ] ; then
   inc sh -c "pacman-key --init"
   inc sh -c "pacman -S --noconfirm archlinux-keyring"
   inc sh -c "pacman -Syu --noconfirm"
+  inc sh -c "pacman -S --noconfirm sudo "
+
+  # Setup user 'user' for AUR package building
+  inc sh -c "useradd -m -G users,dbus,wheel user"
+  inc sh -c "echo \"%wheel ALL=(ALL) NOPASSWD: ALL\" > /etc/sudoers.d/enablewheel"
+
+  # Misc build tools
+  inc sh -c "pacman -Syu --noconfirm base-devel git vim curl wget"
+
+  # AUR helper
+  inc sh -c "cd /opt && git clone https://aur.archlinux.org/yay-git.git && chown -R user:user /opt/yay-git "
+  inc sh -c "sudo -u user sh -c \"cd /opt/yay-git ; makepkg -si --noconfirm \" "
 
   sudo touch "$pacman_setup_complete_flag"
 fi
 
 # Now that we have up-to-date packages, install the things specific to our target software
-inc sh -c "which git >/dev/null 2>/dev/null || pacman -Syu --noconfirm base-devel git vim curl wget"
 
 inc sh -c "[ -e /electrostatic_meteor_ablation_sim/.git ] || ( mkdir -p /electrostatic_meteor_ablation_sim ; git clone https://gitlab.com/oppenheim_public/electrostatic_meteor_ablation_sim.git )"
 
 # For all dependencies we check for a canary file before running install; if it's already installed do nothing
-inc sh -c "[ -e /usr/lib/libfftw3f.so ] || pacman -Syu --noconfirm fftw"
+inc sh -c "[ -e /usr/lib/libfftw3f.so ] || sudo -u user yay -Syu --noconfirm fftw2"
+
+
 inc sh -c "[ -e /usr/bin/mpicc ] || pacman -Syu --noconfirm openmpi"
 inc sh -c "[ -e /usr/bin/h5cc ] || pacman -Syu --noconfirm hdf5"
 
@@ -97,7 +115,7 @@ cat <<EOF
 To compile electrostatic_meteor_ablation_sim:
 
   > cd /electrostatic_meteor_ablation_sim/src
-  > make 'MPICXX=mpic++' 'CXXFLAGS+=-fpermissive' 'CXXFLAGS+=-I/electrostatic_meteor_ablation_sim/src/classes'
+  > make 'MPICXX=mpic++' 'CXXFLAGS+=-fpermissive' 'CXXFLAGS+=-I/electrostatic_meteor_ablation_sim/src/classes' 'CPPFLAGS+=-I/electrostatic_meteor_ablation_sim/src'
 
 
 EOF
