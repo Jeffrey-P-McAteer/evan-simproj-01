@@ -103,9 +103,7 @@ fi
 inc sh -c "[ -e /electrostatic_meteor_ablation_sim/.git ] || ( mkdir -p /electrostatic_meteor_ablation_sim ; git clone https://gitlab.com/oppenheim_public/electrostatic_meteor_ablation_sim.git )"
 
 # For all dependencies we check for a canary file before running install; if it's already installed do nothing
-inc sh -c "[ -e /usr/lib/libfftw3f.so ] || sudo -u user yay -Syu --noconfirm fftw2"
-
-
+inc sh -c "[ -e /usr/include/dfftw.h ] || sudo -u user yay -Syu --noconfirm fftw2"
 inc sh -c "[ -e /usr/bin/mpicc ] || pacman -Syu --noconfirm openmpi"
 inc sh -c "[ -e /usr/bin/h5cc ] || pacman -Syu --noconfirm hdf5"
 
@@ -115,7 +113,7 @@ cat <<EOF
 To compile electrostatic_meteor_ablation_sim:
 
   > cd /electrostatic_meteor_ablation_sim/src
-  > make 'MPICXX=mpic++' 'CXXFLAGS+=-fpermissive' 'CXXFLAGS+=-I/electrostatic_meteor_ablation_sim/src/classes' 'CPPFLAGS+=-I/electrostatic_meteor_ablation_sim/src'
+  > make 'MPICXX=mpic++' 'CXXFLAGS+=-fpermissive' 'CXXFLAGS+=-I/electrostatic_meteor_ablation_sim/src/classes' 'CPPFLAGS+=-I/electrostatic_meteor_ablation_sim/src' 'CPPFLAGS+=-DNDIM=2' 
 
 
 EOF
