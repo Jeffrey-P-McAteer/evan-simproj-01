@@ -1,8 +1,10 @@
 #!/bin/bash
 
+set -e
+
 dependencies=(
   mkdir wget date
-  sudo
+  sudo sed curl tee
 )
 
 for dependency in "${dependencies[@]}" ; do
@@ -14,7 +16,7 @@ done
 
 root_dir="$PWD/container_root"
 
-if ! [ -e "$root_dir" ] || ! [ -e "$root_dir/root" ]; then
+if ! [[ -e "$root_dir" ]] || ! [[ -e "$root_dir/root" ]]; then
   echo "Creating an Arch Linux container at $root_dir"
   sudo mkdir -p "$root_dir"
 
@@ -25,6 +27,16 @@ if ! [ -e "$root_dir" ] || ! [ -e "$root_dir/root" ]; then
 
 fi
 
+container_ml="$root_dir"/etc/pacman.d/mirrorlist
+if [[ $(date +%s -r "$container_ml" ) -lt $(date +%s --date="3 days ago") ]] ; then
+  if [[ -e /etc/pacman.d/mirrorlist ]] ; then
+    echo "Copying your mirrorlist into the container"
+    sudo cp /etc/pacman.d/mirrorlist "$container_ml"
+  else
+    echo "Downloading a mirrorlist from https://archlinux.org/mirrorlist to $container_ml"
+    curl 'https://archlinux.org/mirrorlist/?country=US&protocol=http&protocol=https&ip_version=4' | sed 's/#Server/Server/g' | sudo tee "$container_ml"
+  fi
+fi
 
 
 
