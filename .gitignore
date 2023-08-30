@@ -1,0 +1,14 @@
+container_root
+container_root/*
+
+out
+out/*
+build
+build/*
+
+__pycache__
+__pycache__/*
+*.pyc
+
+
+
