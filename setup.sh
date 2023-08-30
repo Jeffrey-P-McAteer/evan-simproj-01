@@ -97,7 +97,7 @@ cat <<EOF
 To compile electrostatic_meteor_ablation_sim:
 
   > cd /electrostatic_meteor_ablation_sim/src
-  > make MPICXX=mpic++
+  > make 'MPICXX=mpic++' 'CXXFLAGS+=-fpermissive' 'CXXFLAGS+=-I/electrostatic_meteor_ablation_sim/src/classes'
 
 
 EOF
