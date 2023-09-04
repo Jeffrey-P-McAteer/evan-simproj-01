@@ -101,11 +101,13 @@ fi
 # Now that we have up-to-date packages, install the things specific to our target software
 
 inc sh -c "[ -e /electrostatic_meteor_ablation_sim/.git ] || ( mkdir -p /electrostatic_meteor_ablation_sim ; git clone https://gitlab.com/oppenheim_public/electrostatic_meteor_ablation_sim.git )"
+# inc sh -c "[ -e /FDPS/.git ] || ( mkdir -p /FDPS ; git clone https://github.com/FDPS/FDPS.git )"
 
 # For all dependencies we check for a canary file before running install; if it's already installed do nothing
 inc sh -c "[ -e /usr/include/dfftw.h ] || sudo -u user yay -Syu --noconfirm fftw2"
 inc sh -c "[ -e /usr/bin/mpicc ] || pacman -Syu --noconfirm openmpi"
 inc sh -c "[ -e /usr/bin/h5cc ] || pacman -Syu --noconfirm hdf5"
+inc sh -c "[ -e /usr/bin/gsl-config ] || pacman -Syu --noconfirm gsl"
 
 # Run an interactive terminal
 cat <<EOF
@@ -113,16 +115,19 @@ cat <<EOF
 To compile electrostatic_meteor_ablation_sim:
 
   > cd /electrostatic_meteor_ablation_sim/src
+  > 
   > make \\
       'MPICXX=mpic++' \\
       'CXXFLAGS+=-fpermissive' \\
       'CXXFLAGS+=-I/electrostatic_meteor_ablation_sim/src/classes' \\
       'CPPFLAGS+=-I/electrostatic_meteor_ablation_sim/src' \\
+      'CPPFLAGS+=-D_GNU_SOURCE=1' \\
+      'CPPFLAGS+=-D_POSIX_C_SOURCE=200809L' \\
+      'CPPFLAGS+=-D_XOPEN_SOURCE=700' \\
       'CPPFLAGS+=-DNDIM=2' \\
       'CPPFLAGS+=-DUSE_MPI=1' \\
-      'CPPFLAGS+=-I/home/user/.cache/yay/fftw2/src/fftw-2.1.5/rfftw' \\
-      'CPPFLAGS+=-I/home/user/.cache/yay/fftw2/src/fftw-2.1.5/fftw'
-
+      'CPPFLAGS+=-DUSE_DOMAINS=1' \\
+      'CPPFLAGS+=-DHAVE_SCHED_H=1'
 
 EOF
 inc sh -c "cd /electrostatic_meteor_ablation_sim ; bash"
