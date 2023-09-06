@@ -150,7 +150,8 @@ To compile electrostatic_meteor_ablation_sim:
       'CPPFLAGS+=-DNDIM=2' \\
       'CPPFLAGS+=-DUSE_MPI=1' \\
       'CPPFLAGS+=-DUSE_DOMAINS=1' \\
-      'CPPFLAGS+=-DHAVE_SCHED_H=1'
+      'CPPFLAGS+=-DHAVE_SCHED_H=1' \\
+      'CPPFLAGS+=-DEPPIC_FFTW_USE_D_PREFIX=1'
 
 EOF
 inc sh -c "cd /electrostatic_meteor_ablation_sim ; bash"
