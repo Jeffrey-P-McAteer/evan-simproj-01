@@ -149,7 +149,7 @@ To compile electrostatic_meteor_ablation_sim:
 
   > su user
   > cd /electrostatic_meteor_ablation_sim/src
-  > make \\
+  > make -j4 \\
       'FFTWLIBDIR=/usr/lib' \\
       'MPICXX=mpic++' \\
       'CXXFLAGS+=-fpermissive' \\
