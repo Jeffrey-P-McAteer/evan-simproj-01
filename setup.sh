@@ -153,6 +153,9 @@ To compile electrostatic_meteor_ablation_sim:
       'CPPFLAGS+=-DHAVE_SCHED_H=1' \\
       'CPPFLAGS+=-DEPPIC_FFTW_USE_D_PREFIX=1'
 
+  If gather_den_flux.cc errors about code like "int x = 5; int x = 5;" just remove the variable dec;
+  hopefully that's not mathematically significant?
+
 EOF
 inc sh -c "cd /electrostatic_meteor_ablation_sim ; bash"
 
