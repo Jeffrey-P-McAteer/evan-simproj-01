@@ -125,7 +125,7 @@ inc_ifn /usr/bin/mpicc sh -c \
   'sudo -u user yay -Su --noconfirm openmpi'
 
 inc_ifn /usr/bin/h5cc sh -c \
-  'sudo -u user yay -Su --noconfirm hdf5'
+  'sudo -u user yay -Su --noconfirm hdf5-openmpi'
 
 inc_ifn /usr/bin/gsl-config sh -c \
   'sudo -u user yay -Su --noconfirm gsl'
@@ -155,6 +155,11 @@ To compile electrostatic_meteor_ablation_sim:
 
   If gather_den_flux.cc errors about code like "int x = 5; int x = 5;" just remove the variable dec;
   hopefully that's not mathematically significant?
+
+  also we replace MPI_Errhandler_get with MPI_Comm_get_errhandler in main.cc because
+  modern MPI does not have MPI_Errhandler_get defined.
+
+  
 
 EOF
 inc sh -c "cd /electrostatic_meteor_ablation_sim ; bash"
