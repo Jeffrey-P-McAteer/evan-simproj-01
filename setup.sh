@@ -131,7 +131,7 @@ inc_ifn /usr/include/dfftw.h sh -c \
 inc_ifn /usr/bin/mpicc sh -c \
   'sudo -u user yay -Su --noconfirm openmpi'
 
-inc_ifn /usr/bin/h5cc sh -c \
+inc_ifn /usr/bin/h5pcc sh -c \
   'sudo -u user yay -Su --noconfirm hdf5-openmpi'
 
 inc_ifn /usr/bin/gsl-config sh -c \
