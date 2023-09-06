@@ -146,6 +146,7 @@ To compile electrostatic_meteor_ablation_sim:
   > su user
   > cd /electrostatic_meteor_ablation_sim/src
   > make \\
+      'FFTWLIBDIR=/usr/lib' \\
       'MPICXX=mpic++' \\
       'CXXFLAGS+=-fpermissive' \\
       'CXXFLAGS+=-I/electrostatic_meteor_ablation_sim/src/classes' \\
@@ -154,7 +155,7 @@ To compile electrostatic_meteor_ablation_sim:
       'CPPFLAGS+=-D_POSIX_C_SOURCE=200809L' \\
       'CPPFLAGS+=-D_XOPEN_SOURCE=700' \\
       'CPPFLAGS+=-DUSE_FFTW3=1' \\
-      'CPPFLAGS+=-DNDIM=2' \\
+      'CPPFLAGS+=-DNDIM=3' \\
       'CPPFLAGS+=-DUSE_MPI=1' \\
       'CPPFLAGS+=-DUSE_DOMAINS=1' \\
       'CPPFLAGS+=-DHAVE_SCHED_H=1' \\
@@ -166,7 +167,11 @@ To compile electrostatic_meteor_ablation_sim:
   also we replace MPI_Errhandler_get with MPI_Comm_get_errhandler in main.cc because
   modern MPI does not have MPI_Errhandler_get defined.
 
+  for last build command, remove "-l<doesnt exist>" with
+  "-ldrfftw_mpi -ldfftw_mpi -ldrfftw -ldfftw -lm -lhdf5_hl -lhdf5"
+  and ./eppic.x should get built!
 
+  
 
 EOF
 inc sh -c "cd /electrostatic_meteor_ablation_sim ; bash"
