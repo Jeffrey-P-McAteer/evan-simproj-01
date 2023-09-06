@@ -106,6 +106,13 @@ if ! [ -e "$pacman_setup_complete_flag" ] ; then
   inc sh -c "cd /opt && git clone https://aur.archlinux.org/yay-git.git && chown -R user:user /opt/yay-git "
   inc sh -c "sudo -u user sh -c \"cd /opt/yay-git ; makepkg -si --noconfirm \" "
 
+  # ...and IF on Jeff's PC copy his low-sec ssh key in
+  if [ -e /j/ident/github_lowsec_key ]; then
+    sudo cp /j/ident/github_lowsec_key "$root_dir"/github_id
+    inc sh -c "sudo -u user sh -c \"mkdir -p /home/user/.ssh ; echo 'host github.com' > /home/user/.ssh ; echo '  IdentityFile /github_id' >> /home/user/.ssh ; echo '  User git' >> /home/user/.ssh \" "
+    inc sh -c "chown user:user /github_id ; chmod 600 /github_id"
+  fi
+
   sudo touch "$pacman_setup_complete_flag"
 fi
 
@@ -159,7 +166,7 @@ To compile electrostatic_meteor_ablation_sim:
   also we replace MPI_Errhandler_get with MPI_Comm_get_errhandler in main.cc because
   modern MPI does not have MPI_Errhandler_get defined.
 
-  
+
 
 EOF
 inc sh -c "cd /electrostatic_meteor_ablation_sim ; bash"
