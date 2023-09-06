@@ -35,7 +35,7 @@ if ! [[ -e "$root_dir" ]] || ! [[ -e "$root_dir/root" ]]; then
 fi
 
 container_ml="$root_dir"/etc/pacman.d/mirrorlist
-if [[ $(date +%s -r "$container_ml" ) -lt $(date +%s --date="3 days ago") ]] ; then
+if [[ $(date +%s -r "$container_ml" ) -lt $(date +%s --date="12 days ago") ]] ; then
   if [[ -e /etc/pacman.d/mirrorlist ]] ; then
     echo "Copying your mirrorlist into the container"
     sudo cp /etc/pacman.d/mirrorlist "$container_ml"
@@ -61,6 +61,17 @@ inc() {
     --machine="$container_hostname" \
     -D "$root_dir" \
     "$@"
+}
+
+# "inc if file does not exist" - shortcut for installing packages using canary files
+# OUTSIDE the container instead of inside b/c that's faster.
+inc_ifn() {
+  canary_file="${root_dir%%/}/$1"
+  if [ -e "$canary_file" ] ; then
+    echo "Skipping b/c $1 exists >>> " "${@:2}"
+  else
+    inc "${@:2}"
+  fi
 }
 
 pacman_setup_complete_flag="$root_dir"/root/.pacman-setup-complete
@@ -100,16 +111,23 @@ fi
 
 # Now that we have up-to-date packages, install the things specific to our target software
 
-inc sh -c "[ -e /electrostatic_meteor_ablation_sim/.git ] || ( mkdir -p /electrostatic_meteor_ablation_sim ; git clone https://gitlab.com/oppenheim_public/electrostatic_meteor_ablation_sim.git )"
-# inc sh -c "[ -e /FDPS/.git ] || ( mkdir -p /FDPS ; git clone https://github.com/FDPS/FDPS.git )"
+inc_ifn /electrostatic_meteor_ablation_sim/.git sh -c \
+  'mkdir -p /electrostatic_meteor_ablation_sim ; git clone https://gitlab.com/oppenheim_public/electrostatic_meteor_ablation_sim.git /electrostatic_meteor_ablation_sim ; chown -R user:user /electrostatic_meteor_ablation_sim'
 
-# For all dependencies we check for a canary file before running install; if it's already installed do nothing
-inc sh -c "[ -e /usr/include/dfftw.h ] || sudo -u user yay -Syu --noconfirm fftw2"
-inc sh -c "[ -e /usr/bin/mpicc ] || pacman -Syu --noconfirm openmpi"
-inc sh -c "[ -e /usr/bin/h5cc ] || pacman -Syu --noconfirm hdf5"
-inc sh -c "[ -e /usr/bin/gsl-config ] || pacman -Syu --noconfirm gsl"
+inc_ifn /usr/include/dfftw.h sh -c \
+  'sudo -u user yay -Su --noconfirm fftw2'
 
-# Run an interactive terminal
+inc_ifn /usr/bin/mpicc sh -c \
+  'sudo -u user yay -Su --noconfirm openmpi'
+  
+inc_ifn /usr/bin/h5cc sh -c \
+  'sudo -u user yay -Su --noconfirm hdf5'
+  
+inc_ifn /usr/bin/gsl-config sh -c \
+  'sudo -u user yay -Su --noconfirm gsl'
+  
+
+# Lastly, run an interactive terminal
 cat <<EOF
 
 To compile electrostatic_meteor_ablation_sim:
