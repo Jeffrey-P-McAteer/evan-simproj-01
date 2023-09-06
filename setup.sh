@@ -143,8 +143,8 @@ cat <<EOF
 
 To compile electrostatic_meteor_ablation_sim:
 
+  > su user
   > cd /electrostatic_meteor_ablation_sim/src
-  > 
   > make \\
       'MPICXX=mpic++' \\
       'CXXFLAGS+=-fpermissive' \\
