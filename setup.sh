@@ -117,15 +117,19 @@ inc_ifn /electrostatic_meteor_ablation_sim/.git sh -c \
 inc_ifn /usr/include/dfftw.h sh -c \
   'sudo -u user yay -Su --noconfirm fftw2'
 
+inc_ifn /usr/include/dfftw.h sh -c \
+  'sudo -u user yay -Su --noconfirm fftw'
+
+
 inc_ifn /usr/bin/mpicc sh -c \
   'sudo -u user yay -Su --noconfirm openmpi'
-  
+
 inc_ifn /usr/bin/h5cc sh -c \
   'sudo -u user yay -Su --noconfirm hdf5'
-  
+
 inc_ifn /usr/bin/gsl-config sh -c \
   'sudo -u user yay -Su --noconfirm gsl'
-  
+
 
 # Lastly, run an interactive terminal
 cat <<EOF
@@ -142,6 +146,7 @@ To compile electrostatic_meteor_ablation_sim:
       'CPPFLAGS+=-D_GNU_SOURCE=1' \\
       'CPPFLAGS+=-D_POSIX_C_SOURCE=200809L' \\
       'CPPFLAGS+=-D_XOPEN_SOURCE=700' \\
+      'CPPFLAGS+=-DUSE_FFTW3=1' \\
       'CPPFLAGS+=-DNDIM=2' \\
       'CPPFLAGS+=-DUSE_MPI=1' \\
       'CPPFLAGS+=-DUSE_DOMAINS=1' \\
