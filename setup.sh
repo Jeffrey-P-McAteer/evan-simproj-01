@@ -118,8 +118,12 @@ fi
 
 # Now that we have up-to-date packages, install the things specific to our target software
 
+#inc_ifn /electrostatic_meteor_ablation_sim/.git sh -c \
+#  'mkdir -p /electrostatic_meteor_ablation_sim ; git clone https://gitlab.com/oppenheim_public/electrostatic_meteor_ablation_sim.git /electrostatic_meteor_ablation_sim ; chown -R user:user /electrostatic_meteor_ablation_sim'
+
+# Swap out jeff's changes directly
 inc_ifn /electrostatic_meteor_ablation_sim/.git sh -c \
-  'mkdir -p /electrostatic_meteor_ablation_sim ; git clone https://gitlab.com/oppenheim_public/electrostatic_meteor_ablation_sim.git /electrostatic_meteor_ablation_sim ; chown -R user:user /electrostatic_meteor_ablation_sim'
+  'mkdir -p /electrostatic_meteor_ablation_sim ; git clone https://github.com/Jeffrey-P-McAteer/electrostatic_meteor_ablation_sim.git /electrostatic_meteor_ablation_sim ; chown -R user:user /electrostatic_meteor_ablation_sim'
 
 inc_ifn /usr/include/dfftw.h sh -c \
   'sudo -u user yay -Su --noconfirm fftw2'
