@@ -137,6 +137,10 @@ inc_ifn /usr/bin/h5pcc sh -c \
 inc_ifn /usr/bin/gsl-config sh -c \
   'sudo -u user yay -Su --noconfirm gsl'
 
+# Gdb is great for debugging!
+inc_ifn /usr/sbin/gdb sh -c \
+  'sudo -u user yay -Su --noconfirm gdb'
+
 
 # Lastly, run an interactive terminal
 cat <<EOF
@@ -171,7 +175,13 @@ To compile electrostatic_meteor_ablation_sim:
   "-ldrfftw_mpi -ldfftw_mpi -ldrfftw -ldfftw -lm -lhdf5_hl -lhdf5"
   and ./eppic.x should get built!
 
-  
+  Once ./eppic.x is built, copy an input file from input_files and name it eppic.i
+
+  Run simulation like
+
+  > ./eppic.x eppic.i
+  > gdb -batch -ex "run" -ex "bt" --args ./eppic.x eppic.i
+
 
 EOF
 inc sh -c "cd /electrostatic_meteor_ablation_sim ; bash"
