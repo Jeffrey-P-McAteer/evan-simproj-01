@@ -164,6 +164,7 @@ To compile electrostatic_meteor_ablation_sim:
       'CPPFLAGS+=-DUSE_DOMAINS=1' \\
       'CPPFLAGS+=-DHAVE_SCHED_H=1' \\
       'CPPFLAGS+=-DEPPIC_FFTW_USE_D_PREFIX=1' \\
+      'CPPFLAGS+=-DDEBUG' \\
       'CPPFLAGS+=-g'
 
   If gather_den_flux.cc errors about code like "int x = 5; int x = 5;" just remove the variable dec;
@@ -181,7 +182,7 @@ To compile electrostatic_meteor_ablation_sim:
   Run simulation like
 
   > ./eppic.x eppic.i
-  > gdb -batch -ex "run" -ex "bt" --args ./eppic.x eppic.i
+  > gdb -batch -ex "run" -ex "bt" -ex "info locals" --args ./eppic.x eppic.i
 
 
 EOF
