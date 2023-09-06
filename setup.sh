@@ -181,9 +181,13 @@ To compile electrostatic_meteor_ablation_sim:
 
   Run simulation like
 
-  > ./eppic.x eppic.i
-  > gdb -batch -ex "run" -ex "bt" -ex "info locals" --args ./eppic.x eppic.i
+  ####> ./eppic.x eppic.i
+  ####> gdb -batch -ex "run" -ex "bt" -ex "info locals" --args ./eppic.x eppic.i
 
+  > mpiexec -np 32 ./eppic.x eppic.i
+
+  where -np 32 is the number of MPI "slots" that ./eppic.x can use; ./eppic.x assumes it is
+  run through mpiexec, and mpiexec has a number of config options we should read through.
 
 EOF
 inc sh -c "cd /electrostatic_meteor_ablation_sim ; bash"
