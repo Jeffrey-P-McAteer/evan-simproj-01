@@ -168,6 +168,8 @@ To compile electrostatic_meteor_ablation_sim:
       'CPPFLAGS+=-DUSE_DOMAINS=1' \\
       'CPPFLAGS+=-DHAVE_SCHED_H=1' \\
       'CPPFLAGS+=-DEPPIC_FFTW_USE_D_PREFIX=1' \\
+      'LIBS-=-lrfftw_mpi -lfftw_mpi -lrfftw -lfftw' \\
+      'LIBS+=-ldrfftw_mpi -ldfftw_mpi -ldrfftw -ldfftw -lm -lhdf5_hl -lhdf5' \\
       'CPPFLAGS+=-g'
 
   If gather_den_flux.cc errors about code like "int x = 5; int x = 5;" just remove the variable dec;
