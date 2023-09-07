@@ -74,7 +74,7 @@ inc_ifn() {
   fi
 }
 
-pacman_setup_complete_flag="$root_dir"/root/.pacman-setup-complete
+pacman_setup_complete_flag="$root_dir"/.pacman-setup-complete
 if ! [ -e "$pacman_setup_complete_flag" ] ; then
   # Enable multilib!
   inc sh -c "echo '[multilib]' >> /etc/pacman.conf"
