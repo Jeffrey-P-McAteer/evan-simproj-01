@@ -91,16 +91,16 @@ if ! [ -e "$pacman_setup_complete_flag" ] ; then
 
   inc sh -c "pacman -Sy"
   inc sh -c "pacman-key --init"
-  inc sh -c "pacman -S --noconfirm archlinux-keyring"
-  inc sh -c "pacman -Syu --noconfirm"
-  inc sh -c "pacman -S --noconfirm sudo "
+  inc sh -c "pacman -S --noconfirm --overwrite \* archlinux-keyring"
+  inc sh -c "pacman -Syu --noconfirm --overwrite \*"
+  inc sh -c "pacman -S --noconfirm --overwrite \* sudo "
 
   # Setup user 'user' for AUR package building
   inc sh -c "useradd -m -G users,dbus,wheel user"
   inc sh -c "echo \"%wheel ALL=(ALL) NOPASSWD: ALL\" > /etc/sudoers.d/enablewheel"
 
   # Misc build tools
-  inc sh -c "pacman -Syu --noconfirm base-devel git vim curl wget"
+  inc sh -c "pacman -Syu --noconfirm --overwrite \* base-devel git vim curl wget"
 
   # AUR helper
   inc sh -c "cd /opt && git clone https://aur.archlinux.org/yay-git.git && chown -R user:user /opt/yay-git "
