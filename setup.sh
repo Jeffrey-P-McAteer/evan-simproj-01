@@ -172,32 +172,25 @@ To compile electrostatic_meteor_ablation_sim:
       'LIBS+=-ldrfftw_mpi -ldfftw_mpi -ldrfftw -ldfftw -lm -lhdf5_hl -lhdf5' \\
       'CPPFLAGS+=-g'
 
-  If gather_den_flux.cc errors about code like "int x = 5; int x = 5;" just remove the variable dec;
-  hopefully that's not mathematically significant?
-
-  also we replace MPI_Errhandler_get with MPI_Comm_get_errhandler in main.cc because
-  modern MPI does not have MPI_Errhandler_get defined.
-
-  for last build command, remove "-l<doesnt exist>" with
-  "-ldrfftw_mpi -ldfftw_mpi -ldrfftw -ldfftw -lm -lhdf5_hl -lhdf5"
-  and ./eppic.x should get built!
-
-  Once ./eppic.x is built, copy an input file from input_files and name it eppic.i
-
   Run simulation like
 
-  ####> ./eppic.x eppic.i
-  ####> gdb -batch -ex "run" -ex "bt" -ex "info locals" --args ./eppic.x eppic.i
-
-  > mpiexec -np 32 --oversubscribe ./eppic.x eppic.i
+    > su user
+    > cd /electrostatic_meteor_ablation_sim/src
+    > mpiexec -np 32 --oversubscribe ./eppic.x eppic.i
 
   where -np 32 is the number of MPI "slots" that ./eppic.x can use; ./eppic.x assumes it is
   run through mpiexec, and mpiexec has a number of config options we should read through.
 
   --oversubscribe says "ignore hardware capabilities and lie to eppic about HW parallelism available"
 
+  To diagnose segfaults, add in GDB like so:
+
+    > mpiexec -np 32 --oversubscribe gdb -batch -ex "run" -ex "bt" -ex "info locals" --args ./eppic.x eppic.i
+
+  Which will print the line of C code and local variable values when the ./eppic.x crashes.
+
 EOF
-inc sh -c "cd /electrostatic_meteor_ablation_sim ; bash"
+inc sh -c "cd / ; bash"
 
 
 
