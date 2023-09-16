@@ -40,9 +40,9 @@ if ! [[ -z "$DEBUG" ]] ; then
     --setenv=last_cmd_chdir="/electrostatic_meteor_ablation_sim" \
     --setenv=container_hostname="$container_hostname" \
     ./setup.sh sudo -u user \
-      mpiexec -np "$num_mpi_threads" \
-        /electrostatic_meteor_ablation_sim/src/eppic.x "$@"
-
+      mpiexec -np "$num_mpi_threads" --oversubscribe gdb -batch -ex "run" -ex "bt" -ex "info locals" --args \
+        /electrostatic_meteor_ablation_sim/src/eppic.x "$@"  
+        
 else
   echo "DEBUG not set, running without gdb for segfault backtraces"
   sudo systemd-run --unit="$long_job_task_name" --remain-after-exit --same-dir \
@@ -50,8 +50,9 @@ else
     --setenv=last_cmd_chdir="/electrostatic_meteor_ablation_sim" \
     --setenv=container_hostname="$container_hostname" \
     ./setup.sh sudo -u user \
-      mpiexec -np "$num_mpi_threads" gdb -batch -ex "run" -ex "bt" -ex "info locals" --args \
+      mpiexec -np "$num_mpi_threads" --oversubscribe \
         /electrostatic_meteor_ablation_sim/src/eppic.x "$@"
+
 fi
 
 echo 'Job spawned!'
