@@ -156,7 +156,8 @@ inc_ifn /usr/sbin/gdb sh -c \
 
 
 # Lastly, run an interactive terminal
-cat <<EOF
+if [[ "$#" -lt 1 ]] ; then
+  cat <<EOF
 
 To compile electrostatic_meteor_ablation_sim:
 
@@ -199,8 +200,11 @@ To compile electrostatic_meteor_ablation_sim:
   Which will print the line of C code and local variable values when the ./eppic.x crashes.
 
 EOF
-inc sh -c "cd / ; bash"
-
+  inc sh -c "cd / ; bash"
+else
+  echo ''
+  inc "$@"
+fi
 
 
 
