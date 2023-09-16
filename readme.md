@@ -40,6 +40,14 @@ cd /projects/evan-ram-simproj
 
 ```
 
+# Network files / non-linux user file permission hiccup fixes
+
+```bash
+# Find all files under input_files and make them world read/write/executable (matching windows permissions)
+find ./container_root/electrostatic_meteor_ablation_sim/input_files -exec sudo chmod 777 {} \;
+
+```
+
 
 ## References
 
