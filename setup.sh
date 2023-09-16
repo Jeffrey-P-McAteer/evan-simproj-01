@@ -17,6 +17,15 @@ done
 
 container_hostname='evan-simproj-01'
 
+# Auto-populate an empty root_dir based on individual
+# users's hostnames
+if [[ -z "$root_dir" ]] ; then
+  case $(cat /etc/hostname) in
+      azure-angel) root_dir='/mnt/scratch/containers/evan-simproj-01' ;;
+  esac
+fi
+
+# Fall back to CWD if we don't have a better place for the data.
 if [[ -z "$root_dir" ]] ; then
   root_dir="$PWD/container_root"
 fi
