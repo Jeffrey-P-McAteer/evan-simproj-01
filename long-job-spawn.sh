@@ -17,7 +17,9 @@ echo ''
 sudo systemctl reset-failed || true
 
 sudo systemd-run --unit="$long_job_task_name" --remain-after-exit --same-dir \
-  --quiet --no-block --setenv=last_cmd_chdir="/electrostatic_meteor_ablation_sim" \
+  --quiet --no-block \
+  --setenv=last_cmd_chdir="/electrostatic_meteor_ablation_sim" \
+  --setenv=container_hostname="$container_hostname" \
   ./setup.sh sudo -u user \
     mpiexec gdb -batch -ex "run" -ex "bt" -ex "info locals" --args \
       /electrostatic_meteor_ablation_sim/src/eppic.x "$@"
