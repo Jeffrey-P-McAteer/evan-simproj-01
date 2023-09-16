@@ -65,11 +65,20 @@ fi
 # container runtime if we prefer something different. nspawn is on most machines though.
 inc() {
   echo "Running in container >>> " "$@"
-  sudo systemd-nspawn \
-    --capability=all \
-    --machine="$container_hostname" \
-    -D "$root_dir" \
-    "$@"
+  if ! [[ -z "$container_chdir" ]] ; then
+    sudo systemd-nspawn \
+      --capability=all \
+      --machine="$container_hostname" \
+      --chdir="$container_chdir" \
+      -D "$root_dir" \
+      "$@"
+  else
+    sudo systemd-nspawn \
+      --capability=all \
+      --machine="$container_hostname" \
+      -D "$root_dir" \
+      "$@"
+  fi
 }
 
 # "inc if file does not exist" - shortcut for installing packages using canary files
@@ -154,6 +163,9 @@ inc_ifn /usr/bin/gsl-config sh -c \
 inc_ifn /usr/sbin/gdb sh -c \
   'sudo -u user yay -Su --noconfirm gdb'
 
+if ! [[ -z "$last_cmd_chdir" ]] ; then
+  container_chdir=$last_cmd_chdir
+fi
 
 # Lastly, run an interactive terminal
 if [[ "$#" -lt 1 ]] ; then
