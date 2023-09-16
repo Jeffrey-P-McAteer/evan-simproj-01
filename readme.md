@@ -26,6 +26,18 @@ root_dir=/mnt/scratch/containers/evan-simproj-01 ./setup.sh
 ./long-job-kill.sh
 
 
+# Running off tmpfs (basically running everything from RAM on a large machine)
+# Step 1: create a folder and mount a tmpfs filesystem on top of it, in this case we pick 210gb:
+sudo mount -t tmpfs -o size=210G tmpfs /projects/evan-ram-simproj
+# Step 2: rsync an existing copy of evan-simproj-01 to the folder in ram:
+sudo rsync -aAXHv /projects/evan-fast-simproj/evan-simproj-01/. /projects/evan-ram-simproj
+# Step 3:
+cd /projects/evan-ram-simproj
+./long-job-spawn.sh /electrostatic_meteor_ablation_sim/input_files/lowres_test1.i
+# Step 4:
+#   Remember to copy files OUT of /projects/evan-ram-simproj, because they're going to be lost on reboot.
+
+
 ```
 
 
