@@ -196,7 +196,7 @@ To compile electrostatic_meteor_ablation_sim:
       'CPPFLAGS+=-DEPPIC_FFTW_USE_D_PREFIX=1' \\
       'LIBS-=-lrfftw_mpi -lfftw_mpi -lrfftw -lfftw' \\
       'LIBS+=-ldrfftw_mpi -ldfftw_mpi -ldrfftw -ldfftw -lm -lhdf5_hl -lhdf5' \\
-      'CPPFLAGS+=-g'
+      'CPPFLAGS+=-g -O2'
 
   Run simulation like
 
