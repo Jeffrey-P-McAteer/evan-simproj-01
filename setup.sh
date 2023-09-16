@@ -15,7 +15,11 @@ for dependency in "${dependencies[@]}" ; do
   fi
 done
 
-container_hostname='evan-simproj-01'
+if [[ -z "$container_hostname" ]] ; then
+  container_hostname='evan-simproj-01'
+fi
+
+echo "container_hostname = $container_hostname"
 
 # Auto-populate an empty root_dir based on individual
 # users's hostnames
